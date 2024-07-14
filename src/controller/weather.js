@@ -15,9 +15,9 @@ async function routes(fastify, options) {
 
     if (redisQuery !== null) return JSON.parse(redisQuery);
     const response = await axios.get(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}${
-        start_date ? "/" + start_date : ""
-      }${end_date ? "/" + end_date : ""}?key=${process.env.APIKEY}`
+      `${process.env.APIURL}${location}${start_date ? "/" + start_date : ""}${
+        end_date ? "/" + end_date : ""
+      }?key=${process.env.APIKEY}`
     );
     console.log("reach");
     await redis.set(location, JSON.stringify(response.data), (err) => {
@@ -43,7 +43,7 @@ async function routes(fastify, options) {
 
     if (redisQuery !== null) return JSON.parse(redisQuery);
     const response = await axios.get(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude},${longitude}?key=${process.env.APIKEY}`
+      `${process.env.APIURL}${latitude},${longitude}?key=${process.env.APIKEY}`
     );
 
     await redis.set(
