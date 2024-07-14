@@ -19,8 +19,12 @@ async function routes(fastify, options) {
         end_date ? "/" + end_date : ""
       }?key=${process.env.APIKEY}`
     );
-    console.log("reach");
+
     await redis.set(location, JSON.stringify(response.data), (err) => {
+      if (err) reply.send(err);
+    });
+
+    await redis.expire(location, 43200, (err) => {
       if (err) reply.send(err);
     });
     return response.data;
@@ -53,6 +57,9 @@ async function routes(fastify, options) {
         if (err) reply.send(err);
       }
     );
+    await redis.expire(location, 43200, (err) => {
+      if (err) reply.send(err);
+    });
     return response.data;
   });
 }
